@@ -1,0 +1,46 @@
+.body {
+    background: #F7F7F7;
+    font: bold italic Helvetica;
+}
+
+#logo-text {
+    font-size: 30px;
+    font-family: Helvetica;
+    letter-spacing: 0px;
+}
+
+.styleFOR {
+    font: bold italic Helvetica;
+    font-size: 22px;
+    border-radius: 100px;
+    opacity: 1;
+    background: #B5C401;
+    width: 144px;
+    height: 39px;
+}
+
+#form-title {
+    font-size: 20px;
+    color: #707070;
+}
+
+#forgetPassword {
+    font-size: 12px;
+    text-decoration: none;
+    color: #C1C1C1;
+    opacity: 1;
+}
+
+#logIn-text {
+    color: #B5C401;
+    font-size: 25px;
+    text-decoration: none;
+    opacity: 1;
+}
+
+#signUp-text {
+    color: #707070;
+    font-size: 25px;
+    text-decoration: none;
+    opacity: 1;
+}
