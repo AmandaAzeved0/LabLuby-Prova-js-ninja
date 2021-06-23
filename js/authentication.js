@@ -11,7 +11,7 @@ content.innerHTML = `
                 
                 <input type="password" class="form-control p-3 fst-italic fw-bold fs-6 border-0 border-bottom" id="LoginPassword" placeholder="Password">
                 
-                <a href="../pages/resetPassword.html" class="text-decoration-none"><p class="text-start fst-italic fw-bold" id="forgetPassword">I forget my password</p> </a>
+                <a href="../pages/resetPassword.html" class="text-decoration-none"><p class="text-start fst-italic fw-bold" id="forgetPassword-text">I forget my password</p> </a>
                 
                 <a href="#" onclick="login()" class="fst-italic fw-bold" id="logIn-text">Log In <img src="../layout/img/right-arrow.svg" width="20px" id="right-arrow"></a>
                 
@@ -25,14 +25,14 @@ content.innerHTML = `
 function login() {
     const email = document.getElementById("LoginEmail").value
     const senha = document.getElementById("LoginPassword").value
+
     const users = JSON.parse(localStorage.getItem('user'))
-    console.log(users);
+
     users.map(user => {
         if (email === user.email && senha === user.senha) {
            return window.location.href = "../pages/list.html";
         }else if (email !== user.email && senha !== user.senha) {
-            alert(`email: ${email} senha: ${senha}`);
-            //alert("Usuário não encontrado! \nClique em Sing Up para se cadastrar! ")
+            alert("Usuário não encontrado! \nClique em Sing Up para se cadastrar! ")
         }
     })
 }
