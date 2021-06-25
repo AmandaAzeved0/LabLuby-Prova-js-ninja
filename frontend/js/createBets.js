@@ -1,6 +1,6 @@
 
-    const content = document.getElementById('betsPageContent')
-    content.innerHTML = `
+const content = document.getElementById('betsPageContent')
+content.innerHTML = `
         <div class="row">
             <div class="col">
                 <strong class="text-uppercase newBetFor-text" id="newBetFor-text">New Bet For </strong>
@@ -27,57 +27,66 @@
         </div>
     `
 
-    const betType = document.getElementById('betType')
-    let gameName
+const betType = document.getElementById('betType')
+let gameName
 
-    function gameConfigRequest(){
-        const ajax = new XMLHttpRequest()
-        ajax.open('GET', 'http://localhost:3000/gamesTypes')
-        ajax.send()
-        ajax.addEventListener('readystatechange',getGameConfig, false)
-    }
+function init(){
+    this.getGamesTypes()
+}
 
-    function getGameConfig(){
-        if(!(this.readyState === 4 && this.status === 200)) return
-        const data = JSON.parse(this.responseText)
-        const arr = types(data)
-        console.log(arr[0]);
-        return arr[0]
-    }
+function getGamesTypes(){
+    const ajax = new XMLHttpRequest()
+    ajax.open('GET', 'http://localhost:3000/gamesTypes', true)
+    ajax.send()
+    console.log(ajax.responseText)
+    ajax.addEventListener('readystatechange', getGameConfig, false)
+    
+}
 
-    function types(data){
-        const arr = []
-        for (let key in data){
-            if(data.hasOwnProperty(key))
-            arr.push(data[key].types);
-        }
-        return arr
-    }
-    function lotofacil(){  
-        gameName = document.getElementById('lotofacil-btn').textContent
-        subTitle(gameName)
-        let teste = displayGameConfig()
-        console.log(teste);
-        //loadGameSet(gameSet)         
-    }
-    function megaSena() { 
-        gameName = document.getElementById('megaSena-btn').textContent 
-        subTitle(gameName)
-    }
-    function lotomania() {   
-        gameName = document.getElementById('lotomania-btn').textContent 
-        subTitle(gameName)     
-    }
+function getGameConfig(){
+    if(!(this.readyState === 4 && this.status === 200)) return
+    const data = JSON.parse(this.responseText)
+    const arr = types(data)
+    console.log(arr[0]);
+    return arr[0]
+}
 
-    function subTitle(gameName){
-        if(betType.hasChildNodes()){
-            betType.removeChild(betType.childNodes[0])
-        }
-        betType.appendChild(document.createTextNode(gameName))
+function types(data){
+    const arr = []
+    for (let key in data){
+        if(data.hasOwnProperty(key))
+        arr.push(data[key].types);
     }
+    return arr
+}
 
-    function loadGameSet(arr){
+function lotofacil(){  
+    gameName = document.getElementById('lotofacil-btn').textContent
+    subTitle(gameName)
+    let teste = displayGameConfig()
+    console.log(teste);     
+}
+
+function megaSena() { 
+    gameName = document.getElementById('megaSena-btn').textContent 
+    subTitle(gameName)
+}
+
+function lotomania() {   
+    gameName = document.getElementById('lotomania-btn').textContent 
+    subTitle(gameName)     
+}
+
+function subTitle(gameName){
+    if(betType.hasChildNodes()){
+        betType.removeChild(betType.childNodes[0])
+    }
+    betType.appendChild(document.createTextNode(gameName))
+}
+
+function loadGameSet(arr){
         console.log(arr);
-    }
+}
 
-    getGameConfig()
+init()
+

@@ -44,5 +44,6 @@ module.exports = app => {
         const selectedItem = currentBets.findIndex((item)=>item.id === id)
         currentBets.splice(selectedItem,1)
         res.send(currentBets)
+        
     })
 }
