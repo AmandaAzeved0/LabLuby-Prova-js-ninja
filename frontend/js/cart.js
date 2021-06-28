@@ -4,13 +4,17 @@ const cartcontent = document.getElementById('cart')
 cartcontent.innerHTML = `
         <div class="card">
             <div class="container">
-                <div class ="text-uppercase newBetFor-text">Recente Bets</div>
+                <div class ="text-uppercase newBetFor-text">Recent Bets</div>
                 <div  class="card-body col" id="card-body"></div>
                 <div>
                     <p class="betType text-uppercase" id="total" >total: R$</p>
                 </div>    
             </div>
-            <div class="card-footer" id="card-footer">Save <img src="../layout/img/right-arrow.svg" width="20px" id="right-arrow"></div>
+            <div class="card-footer"  id="card-footer">
+                <span type="button" onclick="save()"> Save 
+                <img src="../layout/img/right-arrow.svg" width="20px" id="right-arrow">
+                </span>
+            </div>
         </div>
         `
 
@@ -27,6 +31,13 @@ function getBetsList(){
     ajax.addEventListener('readystatechange', displayBetsList, false)
 
 }
+let totalPrice
+
+function save(){
+    totalPrice >= 30 ? alert("Apostas Feitas!"): alert("Faça um pedido de no mínimo R$ 30,00")
+}
+    
+
 
 function displayBetsList(){
 
@@ -49,7 +60,7 @@ function displayBetsList(){
     
         deleteBtn.addEventListener("click", deleteBet.bind(null, id), false)
 
-        betText.setAttribute('class', 'col card-bet-content')
+        betText.setAttribute('class', 'col-7 card-bet-content')
         betText.innerHTML = element.range
 
         prices.push(Number(element.price))
@@ -62,18 +73,20 @@ function displayBetsList(){
         cart.appendChild(fragment)
     })
 
-    const totalPrice = prices.reduce(function(acumulador, currentValue){
+    totalPrice = prices.reduce(function(acumulador, currentValue){
         return acumulador + currentValue
     })
     totalPriceText.appendChild(document.createTextNode(`  ${totalPrice}`))
 
+
+
+    //aqui tudo certo
     function deleteBet(id){
         console.log(id);
         const url = `http://localhost:3000/betsList/${id}`
         const ajax = new XMLHttpRequest()
         ajax.open('DELETE', url , true)
         ajax.send()
-        console.log(ajax.response);
     }
 
 }

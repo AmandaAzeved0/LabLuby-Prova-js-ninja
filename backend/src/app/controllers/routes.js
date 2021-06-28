@@ -21,6 +21,10 @@ module.exports = app => {
         return JSON.parse(content) 
     }
 
+    const updateBetList = function(){
+
+    }
+
     app.get('/betsList',(req, res) => {
         const content = betsList()
         res.send(content)
@@ -43,6 +47,7 @@ module.exports = app => {
         const currentBets = betsList()
         const selectedItem = currentBets.findIndex((item)=>item.id === id)
         currentBets.splice(selectedItem,1)
+        fs.writeFileSync('../backend/src/app/controllers/json/betsList.json', JSON.stringify(currentBets),'utf8')
         res.send(currentBets)
         
     })
