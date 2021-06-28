@@ -30,7 +30,7 @@ function login() {
 
     users.map(user => {
         if (email === user.email && senha === user.senha) {
-           return window.location.href = "../pages/createBets.html";
+           return window.location.href = "../pages/betsPage.html"
         }else if (email !== user.email && senha !== user.senha) {
             alert("Usuário não encontrado! \nClique em Sing Up para se cadastrar! ")
         }

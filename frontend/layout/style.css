@@ -137,7 +137,9 @@
 #megaSena-btn:focus{
     color: #FFFFFF;
     background-color: #01AC66;
+
 }
+
 
 #lotomania-btn {
     color: #F79C31;
@@ -167,6 +169,7 @@
     border-left: 6px solid;
     border-radius: 5px;
 }
+
 #card-footer{
     color:#B5C401;
     background-color: #e7e7e7a4;
@@ -174,6 +177,11 @@
     font-size: 20px;
     font-style: italic;
     font-family: Helvetica; 
+    font-weight: bold;
+}
+#selected-numbers{
+    font-family: Helvetica;
+    color: #868686;
     font-weight: bold;
 }
 
@@ -201,7 +209,15 @@
 	position:relative;
 	top:1px;
 }
-
+.delete-btn{
+ color :#B5C401;
+ border-radius:6px;
+ background-color: transparent;
+ border: 2px solid #B5C401;
+ border-radius: 2rem;
+ height: min-content;
+ margin-right: 1em;
+}
 .actions-btn{
 	border-radius:6px;
 	border:1px solid #dcdcdc;

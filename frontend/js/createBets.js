@@ -1,104 +1,169 @@
+const table = document.getElementById('numbers')
 
-const content = document.getElementById('betsPageContent')
-content.innerHTML = `
-        <div class="row">
-            <div class="col">
-                <strong class="text-uppercase newBetFor-text" id="newBetFor-text">New Bet For </strong>
-                <span class="betType" id="betType"></span>
-            </div>
-            
-            <div>
-            <strong class="tiny-text" id="filters-text">Choose a game</strong>
-            </div>
-            <br/>
-            <div class="col">
-            <button class="btn " onclick="lotofacil()" id="lotofacil-btn" name="subtitleText">Lotofácil</span>
-                <button class="btn" onclick="megaSena()" id="megaSena-btn" name="subtitleText">Mega-Sena</span>
-                <button class="btn" onclick="lotomania()" id="lotomania-btn" name="subtitleText"> Lotomania</button>
-                <br/>
-                <strong class="tiny-text">Fill your bet</strong>
-                <br/>
-                <strong class="tiny-text" id="gameDescription"></strong>
-                <div id="numbers"></div>
-                <div id="betActions"></div>
-            </div>
-            <div class="col-4" id="cart"></div>
-            
-        </div>
-    `
+table.innerHTML = `
+    <br/><br/>
+     <table id="tableContent">
+     </table>
+     <br/><br/>
+     <div id="selected-numbers"><div>
+`
 
-const betType = document.getElementById('betType')
-let subtitleText
-let gameType 
-let gameConfig
 
-function init(){
-    this.sendGamesTypesRequest()
+let maxRange
+let pckdNumbers = []
+
+let type 
+function gtype(gtype){
+    const gameType = {
+        name : gtype.type,
+        description: gtype.description,
+        price : gtype.price,
+        range: gtype.range,
+        maxNumber: gtype["max-number"],
+        color: gtype.color,
+    }
+    type = gameType
+}
+
+//muda a descrição do jogo conforme a escolha do usuario (ok)
+function showDescription() {
+
+    const description = document.getElementById("gameDescription")
+    const text = document.createElement('p')
+    text.setAttribute('id', 'text')
+
+    if (description.hasChildNodes()) {
+        const oldText = document.getElementById('text')
+        oldText.remove()
+    }
+    text.textContent = type.description
+    description.appendChild(text)
+}
+
+//determinas algumas propriedades da tabela de acordo com o tipo de jogo
+function tableInfo() {
+    let tableNumbers = []
+
+    for(let i =1;i<=type.range;i++){
+        tableNumbers.push(i)
+    }
+    console.log(type.range);
+    const rows = tableNumbers.length > 25 ? tableNumbers.length / 10 : 5
+    const columns = tableNumbers.length > 25 ? 9 : 4
+
+    checkTable()
+    tableGenerator(tableNumbers, rows, columns)
+}
+
+//da pra pensar melhor nisso
+let arrDefault=[]
+for(let i =1;i<=60;i++){
+    arrDefault.push(i)
+}
+// gera uma tabela de numeros de acordo com o range do tipo de jogo escolhido(ok)
+function tableGenerator(arr=arrDefault, numberOfRows=5, numberOfColumns=9) {
+    let salto = arr.length > 25 ? 10 : 5
+    for (let row = 1; row <= numberOfRows; row++) {
+        let tr = document.createElement('tr')
+        for (let column = 0; column <= numberOfColumns; column++) {
+            let hop = 0
+            let td = document.createElement('td')
+            let btn = document.createElement('input')
+            arr[hop] > 9 ?
+                btn.setAttribute('value', `${arr.splice(hop, 1)}`)
+                : btn.setAttribute('value', `0${arr.splice(hop, 1)}`)
+            btn.setAttribute('class', 'number-btn')
+            btn.setAttribute('type', 'button')
+            btn.setAttribute('onclick', `pickedNumber(${btn.value})`)
+            td.appendChild(btn)
+            tr.appendChild(td)
+            hop += salto
+        }
+        document.getElementById('tableContent').appendChild(tr)
+    }
+}
+
+//verifica se ja existe uma tabela de numeros na tela (0k)
+function checkTable() {
+    const tableContent = document.getElementById("tableContent")
+    if (tableContent.hasChildNodes()) {
+        while (tableContent.firstChild) {
+            tableContent.firstChild.remove()
+        }
+    }
+    return
+}
+
+//verifica se ja existe um array de números escolhidos na tela (0k)
+function checkCurrentPckdNumbers(){
+    const currentPckdNumbers = document.getElementById("selected-numbers")
+    if(currentPckdNumbers.hasChildNodes()){
+        currentPckdNumbers.removeChild(currentPckdNumbers.childNodes[0])
+        pckdNumbers = []
+    }
+    return
+}
+
+//mostra os números escolhidos ate o momento (ok)
+function pickedNumber(num) {   
+    if (pckdNumbers.length >= type.maxNumber ){
+       return  alert(`Escolha somente ${type.maxNumber} números`)
+    }
+    pckdNumbers.push(num)
+    showPckdNumbers()
     
 }
+//ok
+function showPckdNumbers(){
 
-function sendGamesTypesRequest(){
+    const showPckdNumbers = document.getElementById('selected-numbers')
+    const content = document.createElement('p')
+
+    if (showPckdNumbers.hasChildNodes()) {
+        showPckdNumbers.removeChild(showPckdNumbers.childNodes[0])
+    }
+    content.appendChild(document.createTextNode(`${pckdNumbers}, `))
+    showPckdNumbers.appendChild(content)
+}
+
+//ok
+function addToCart(){  
+    const body = {
+       "type":type.name,
+       "price":type.price,
+       "range": pckdNumbers
+    }
     const ajax = new XMLHttpRequest()
-    ajax.open('GET', 'http://localhost:3000/gamesTypes', true)
-    ajax.send()
-    console.log(ajax.responseText)
-    ajax.addEventListener('readystatechange', getGameInfo, false)    
+    ajax.open('POST', 'http://localhost:3000/betsList')
+    ajax.setRequestHeader("Content-type","application/json")
+    ajax.send(JSON.stringify(body))
 }
-
-function getGameInfo(){
-    if(!(this.readyState === 4 && this.status === 200)) return
-    const data = JSON.parse(this.responseText)
-    const types = getTypes(data)
-    gameType = types[0]
-}
-
-function getTypes(data){
-    const arr = []
-    for (let key in data){
-        if(data.hasOwnProperty(key))
-        arr.push(data[key].types);
+//ok
+function completeGame(){
+    pckdNumbers = []
+    for( let i = 1; i <= type.maxNumber; i++){
+        pckdNumbers.push(Math.floor(Math.random() * type.range) + 1)
     }
-    return arr
+    showPckdNumbers()
+    console.log(pckdNumbers);
 }
 
-function lotofacil(){  
-    subtitleText = document.getElementById('lotofacil-btn').textContent
-    subTitle(subtitleText)
-    selectGameType("Lotofácil")
-    checkCurrentPckdNumbers()   
+//remove um jogo em curso (ok)
+function clearGame(){
+    const currentPckdNumbers = document.getElementById("selected-numbers")
+    currentPckdNumbers.removeChild(currentPckdNumbers.childNodes[0])
+    pckdNumbers = []
 }
 
-function megaSena() { 
-    subtitleText = document.getElementById('megaSena-btn').textContent 
-    subTitle(subtitleText)
-    selectGameType("Mega-Sena")
-    checkCurrentPckdNumbers() 
-}
 
-function lotomania() {   
-    subtitleText = document.getElementById('lotomania-btn').textContent 
-    subTitle(subtitleText)
-    selectGameType("Quina")
-    checkCurrentPckdNumbers()
 
-}
 
-function selectGameType(gameName){
-    for (let key in gameType){
-        if( gameType[key].type === gameName){
-            gtype(gameType[key])
-            showDescription()
-            tableInfo()
-        } 
-   }   
-}
 
-function subTitle(subtitleText){
-    if(betType.hasChildNodes()){
-        betType.removeChild(betType.childNodes[0])
-    }
-    betType.appendChild(document.createTextNode(subtitleText))
-}
 
-init()
+
+
+
+
+
+
 

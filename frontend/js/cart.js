@@ -55,8 +55,7 @@ function displayBetsList(){
         const id = element.id
 
         deleteBtn.innerHTML = 'delete'
-        deleteBtn.setAttribute('class', 'col-3 btn')
-    
+        deleteBtn.setAttribute('class', 'col-3 delete-btn')
     
         deleteBtn.addEventListener("click", deleteBet.bind(null, id), false)
 
