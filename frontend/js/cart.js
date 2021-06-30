@@ -12,7 +12,7 @@ cartcontent.innerHTML = `
             </div>
             <div class="card-footer"  id="card-footer">
                 <span type="button" onclick="save()"> Save 
-                <img src="../layout/img/right-arrow.svg" width="20px" id="right-arrow">
+                <img src="../layout/img/right-arrow3.svg" width="20px" id="right-arrow">
                 </span>
             </div>
         </div>
@@ -25,9 +25,8 @@ let totalPriceValue
 
 //mostra no carrinho cada aposta adicionada
 function displayBetsList(betsList){
-    console.log(betsList);
     const cart = document.getElementById('card-body')
-    const formatedPrice = new Intl.NumberFormat([], {style: 'currency',currency: 'BRL'})
+    const formatedPrice = new Intl.NumberFormat(['pt-br','en-IN'], {style: 'currency',currency: 'BRL'})
     const cartContent = document.createElement('div')
     const deleteBtn =  document.createElement('div')
     const betData =  document.createElement('div')
@@ -64,7 +63,7 @@ function displayBetsList(betsList){
 
     betPrice.setAttribute('class','bet-nums col')
     betPrice.innerHTML = formatedPrice.format(betsList.price)
-    
+    console.log(formatedPrice.format(betsList.price).toString());
     priceAndType.appendChild(betType)
     priceAndType.appendChild(betPrice)
     betData.appendChild(betNums)
@@ -75,7 +74,10 @@ function displayBetsList(betsList){
     bets.push(betsList)
     totalPrice()
 }
+function formatter(str){
+    const arr = str.split()
 
+}
 //calcula o valor total do carrinho
 function totalPrice(){
     let prices = []
@@ -84,7 +86,7 @@ function totalPrice(){
     const cartText = document.createElement('span')
     const totalText = document.createElement('span')
     const totalPriceNumber = document.createElement('span')
-    const priceFormater = new Intl.NumberFormat([], {style: 'currency',currency: 'BRL'}) 
+    const priceFormater =  new Intl.NumberFormat(['pt-br','en-IN'], {style: 'currency',currency: 'BRL'})
 
     if(totalPriceTag.hasChildNodes()){
         totalPriceTag.removeChild(totalPriceTag.childNodes[0])

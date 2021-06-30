@@ -8,10 +8,9 @@ content.innerHTML = `
                 <span class="betType text-uppercase" id="betType"></span>
                 <div>
                 <strong class="tiny-text" id="filters-text">Choose a game</strong>
+                <br/><br/>
                 </div>
-                <div id="filters">
-                    <br/>
-                </div>
+                <div id="filters"></div>
                 <br/>
                 <div>
                     <strong class="tiny-text">Fill your bet</strong>
@@ -59,14 +58,15 @@ function showGameFilters(){
         const span = document.createElement('span')
 
         span.innerHTML=element.type
-        span.setAttribute('id', `${element.type}`)
+        //span.setAttribute('id', `${element.type}`)
 
         input.setAttribute('class' , 'btn')
         input.setAttribute('type' , "radio")
-        input.setAttribute('value' , `${element.type}`)
+        //input.setAttribute('value' , `${element.type}`)
         input.setAttribute('name' , 'bet')
+        input.setAttribute('id' , `${element.type}`)
 
-       span.setAttribute('style',
+       /*span.setAttribute('style',
             `
                 color: ${element.color};
                 border: 2px solid ${element.color};
@@ -75,13 +75,18 @@ function showGameFilters(){
                 margin:5px;
                 
             ` 
-        )
+        )*/
+
+        setColor(input,span,element.color)
         input.addEventListener("click", function(){
+            //setColor(span,element.color)
             filter(element)    
         },false)
+        
         label.appendChild(input)
         label.appendChild(span)
         filterDiv.appendChild(label)
+       
     });
 }
 
@@ -118,6 +123,50 @@ function subTitle(subtitleText){
     betType.appendChild(document.createTextNode(subtitleText))
 }
 
+function setColor(input,span,color){
+    const elements = document.getElementById('filters').childNodes
+    if(input.checked === false){
+        console.log(input.checked);
+        span.setAttribute('style',
+            `
+                color: ${color};
+                border: 2px solid ${color};
+                border-radius: 2rem;
+                padding: 5px 20px;
+                margin:5px;
+                
+           ` )
 
+    }else if(input.checked === true){    
+        span.removeAttribute('style')
+        console.log(span);
+        span.setAttribute('style',
+        `
+            color: '#ffff';
+            border: 2px solid ${color};
+            background-color = ${color};
+            border-radius: 2rem;
+            padding: 5px 20px;
+            margin:5px;
+            
+       ` )
+
+    }
+    /*elements.forEach(element =>{
+        console.log(element.childNodes[0].checked);
+        if (element.childNodes[0].checked === true){
+            span.style.color = '#ffff'
+            span.style.backgroundColor = color
+            span.parentNode.childNodes[0].checked=true
+            
+        }
+        span.style.color=  color
+        span.style.backgroundColor = '#ffff'
+        span.style.border=  '2px solid color'
+        span.style.borderRadius =  '2rem'
+        span.style.padding=  '5px 20px'
+        span.style.margin= '5px'
+        span.parentNode.childNodes[0].checked=false
+    })*/
+}
 init()
-

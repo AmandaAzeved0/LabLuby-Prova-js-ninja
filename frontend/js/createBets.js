@@ -122,7 +122,6 @@ function selectedNumbers(num){
         return
     }
     addNumbers(num)
-    console.log(pckdNumbers);
 }
 
 //insere ou remove um numero (ok)
@@ -152,7 +151,6 @@ function change(bool, num){
 }
 //verifica ser o tamnho do array esta correto e gera um obj pra ser mostrado no carrinho
 function addToCart(){
-    console.log(pckdNumbers);
     if (pckdNumbers.length < type.maxNumber){
         return  alert(`Escolha ${type.maxNumber} números`)
     }
