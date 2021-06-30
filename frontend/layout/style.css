@@ -76,7 +76,7 @@
     opacity: 1;
 }
 
-.newBetFor-text {
+.strong-bold-text {
     color: #707070;
     font-style: italic;
     font-size: 20px;
@@ -113,61 +113,40 @@
     opacity: 1;
     margin:3px;
     margin-bottom: 10px;
-}
-
-#lotofacil-btn {
-    color: #7F3992;
-    background: #FFFFFF 0% 0% no-repeat padding-box;
-    border: 2px solid #7F3992;
-    border-radius: 2rem;
-    
-}
-#lotofacil-btn:focus{
-    color: #FFFFFF;
-    background-color: #7F3992;
-    
-}
-
-#megaSena-btn {
-    color: #01AC66;
-    background: #FFFFFF 0% 0% no-repeat padding-box;
-    border: 2px solid #01AC66;
-    border-radius: 2rem;
-}
-#megaSena-btn:focus{
-    color: #FFFFFF;
-    background-color: #01AC66;
-
+    border-radius:42px;
 }
 
 
-#lotomania-btn {
-    color: #F79C31;
-    background: #FFFFFF 0% 0% no-repeat padding-box;
-    border: 2px solid #F79C31;
-    border-radius: 2rem;
-}
 
-#lotomania-btn:focus{
-    color: #FFFFFF;
-    background-color:#F79C31;
-}
-
-#newBet-text {
+.newBet-text {
     font-style: italic;
     font-family: Helvetica;
     color: #B5C401;
     font-size: 20px;
+    font-weight: bold;
     text-decoration: none;
     opacity: 1;
 }
 
-.card-bet-content{
+.bet-content{
     background-color: #fbfbfb;
-    border-color: #B5C401;
     padding: 10px;
     border-left: 6px solid;
     border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.bet-nums{
+    font-style: italic;
+    font-family: Helvetica;
+    color: #868686;
+    font-weight: bold;
+}
+
+.bet-name{
+    font-style: italic;
+    font-family: Helvetica;
+    font-weight: bold;
 }
 
 #card-footer{
@@ -179,44 +158,16 @@
     font-family: Helvetica; 
     font-weight: bold;
 }
-#selected-numbers{
-    font-family: Helvetica;
-    color: #868686;
-    font-weight: bold;
-}
+
 
 /*buttonsss*/
-.number-btn {
-	box-shadow: 0px 2px 2px 0px #adb2c2;
-    border: none;
-	background-color:#cfcdcda4;;
-	border-radius:42px;
-	display:inline-block;
-	cursor:pointer;
-	color:#ffffff;
-	font-family:Helvetica;
-	font-size:16px;
-	font-weight:bold;
-	padding:6px 11px;
-	text-decoration:none;
-    margin: 4px;
-}
-.number-btn:hover {
-	background-color:#B5C401;
-}
-.number-btn:focus {
-    background-color:#B5C401;
-	position:relative;
-	top:1px;
-}
+
+
 .delete-btn{
- color :#B5C401;
- border-radius:6px;
- background-color: transparent;
- border: 2px solid #B5C401;
- border-radius: 2rem;
- height: min-content;
- margin-right: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
 }
 .actions-btn{
 	border-radius:6px;
@@ -231,18 +182,54 @@
 }
 
 #complete-btn, #clear-btn{
-    color: #B5C401;
+    color: #01AC66;
     background: #FFFFFF 0% 0% no-repeat padding-box;
-    border: 2px solid #B5C401;
-    border-radius: 2rem;
+    border: 2px solid #01AC66;
+    border-radius: 0.5rem;
 }
 
 #addToCart-btn{
     color: #FFFFFF;
-    background: #B5C401 0% 0% no-repeat padding-box;
-    border: 2px solid #B5C401;
-    border-radius: 2rem;
-    margin-left: 70px;
+    background: #01AC66 0% 0% no-repeat padding-box;
+    border: 2px solid #01AC66;
+    border-radius: 0.5rem;
+    margin-left: 150px;
 
 }
+table tr td label input[type="checkbox"]{
+    display: none;
+}
+table tr td label input[type="checkbox"]:checked + span {
+    background: #01AC66
+}
+input[type="radio"]{
+    display: none;
+}
 
+input[type="radio"]:checked + span {
+    background: #01AC66 !important;
+    color: white !important;
+    border: 2px solid#01AC66 !important;
+}
+
+
+
+.nBtn{
+	box-shadow: 0px 2px 2px 0px #adb2c2;
+    border: none;
+	background-color:#cfcdcda4;;
+	border-radius:42px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Helvetica;
+	font-size:16px;
+	font-weight:bold;
+    transition: 0.5s;
+	padding:6px 11px;
+	text-decoration:none;
+    margin: 4px;
+}
+.nbtn:hover {
+	background-color:#B5C401;
+}

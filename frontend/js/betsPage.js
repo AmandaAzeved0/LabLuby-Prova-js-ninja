@@ -2,46 +2,44 @@
 const content = document.getElementById('betsPageContent')
 content.innerHTML = `
         <div class="row">
-            <div class="col">
-                <strong class="text-uppercase newBetFor-text" id="newBetFor-text">New Bet For </strong>
-                <span class="betType" id="betType"></span>
-            </div>
-            
-            <div>
-            <strong class="tiny-text" id="filters-text">Choose a game</strong>
-            </div>
-            <br/>
-            <div class="col">
-            <button class="btn " onclick="lotofacil()" id="lotofacil-btn" name="subtitleText">Lotofácil</span>
-                <button class="btn" onclick="megaSena()" id="megaSena-btn" name="subtitleText">Mega-Sena</span>
-                <button class="btn" onclick="lotomania()" id="lotomania-btn" name="subtitleText"> Lotomania</button>
+            <div class="col-8">
+                <strong class="text-uppercase strong-bold-text" id="newBetFor-text">New Bet </strong>
+                <span class="betType text-uppercase"> For</span>
+                <span class="betType text-uppercase" id="betType"></span>
+                <div>
+                <strong class="tiny-text" id="filters-text">Choose a game</strong>
+                </div>
+                <div id="filters">
+                    <br/>
+                </div>
                 <br/>
-                <strong class="tiny-text">Fill your bet</strong>
-                <br/>
-                <strong class="tiny-text" id="gameDescription"></strong>
+                <div>
+                    <strong class="tiny-text">Fill your bet</strong>
+                    <strong class="tiny-text col" id="gameDescription"></strong>
+                </div>
                 <div id="numbers"></div>
                 <div id="betActions"></div>
+                </div>
+                <div class="col-4" id="cart"></div>
+            
             </div>
-            <div class="col-4" id="cart"></div>
+            
             
         </div>
     `
 
 const betType = document.getElementById('betType')
-let subtitleText
 let gameType 
 let gameConfig
 
 function init(){
-    this.sendGamesTypesRequest()
-    
+    this.sendGamesTypesRequest()    
 }
 
 function sendGamesTypesRequest(){
     const ajax = new XMLHttpRequest()
     ajax.open('GET', 'http://localhost:3000/gamesTypes', true)
     ajax.send()
-    console.log(ajax.responseText)
     ajax.addEventListener('readystatechange', getGameInfo, false)    
 }
 
@@ -50,6 +48,48 @@ function getGameInfo(){
     const data = JSON.parse(this.responseText)
     const types = getTypes(data)
     gameType = types[0]
+    showGameFilters()
+}
+
+function showGameFilters(){
+    let filterDiv = document.getElementById('filters')
+    gameType.forEach(element => {
+        const label = document.createElement('label')
+        const input = document.createElement('input')
+        const span = document.createElement('span')
+
+        span.innerHTML=element.type
+        span.setAttribute('id', `${element.type}`)
+
+        input.setAttribute('class' , 'btn')
+        input.setAttribute('type' , "radio")
+        input.setAttribute('value' , `${element.type}`)
+        input.setAttribute('name' , 'bet')
+
+       span.setAttribute('style',
+            `
+                color: ${element.color};
+                border: 2px solid ${element.color};
+                border-radius: 2rem;
+                padding: 5px 20px;
+                margin:5px;
+                
+            ` 
+        )
+        input.addEventListener("click", function(){
+            filter(element)    
+        },false)
+        label.appendChild(input)
+        label.appendChild(span)
+        filterDiv.appendChild(label)
+    });
+}
+
+function filter(element){
+    const subtitleText = element.type
+    subTitle(subtitleText)
+    selectGameType(element.type)
+    checkCurrentSelectedNumbersArray()
 }
 
 function getTypes(data){
@@ -59,28 +99,6 @@ function getTypes(data){
         arr.push(data[key].types);
     }
     return arr
-}
-
-function lotofacil(){  
-    subtitleText = document.getElementById('lotofacil-btn').textContent
-    subTitle(subtitleText)
-    selectGameType("Lotofácil")
-    checkCurrentPckdNumbers()   
-}
-
-function megaSena() { 
-    subtitleText = document.getElementById('megaSena-btn').textContent 
-    subTitle(subtitleText)
-    selectGameType("Mega-Sena")
-    checkCurrentPckdNumbers() 
-}
-
-function lotomania() {   
-    subtitleText = document.getElementById('lotomania-btn').textContent 
-    subTitle(subtitleText)
-    selectGameType("Quina")
-    checkCurrentPckdNumbers()
-
 }
 
 function selectGameType(gameName){
@@ -99,6 +117,7 @@ function subTitle(subtitleText){
     }
     betType.appendChild(document.createTextNode(subtitleText))
 }
+
 
 init()
 

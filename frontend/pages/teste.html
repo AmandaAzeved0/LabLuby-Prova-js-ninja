@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container{
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            background-color: cornflowerblue;
+            max-width: 600px;
+        }
+        .container div{
+            margin: 20px;
+        }
+        .container div label{
+            cursor: pointer;
+            margin: 10px;
+        }
+       
+        .container div label span{
+            position: relative;
+            display: inline-block;
+            background: rgb(238, 171, 171);
+            padding: 4px 10px;
+            color: chocolate;
+            text-shadow: 0 1px 4px rgb(122, 104, 104);
+            border-radius: 30px;
+            font-size: 20px;
+            transition: 0.5s;
+            user-select: none;
+            overflow: hidden;
+        }
+        
+        input[type="checkbox"],input[type="radio"]{
+            display: none;
+        }
+        input[type="checkbox"]:checked + span {
+                background: #ffff;
+        }
+        input[type="radio"]:checked + span{
+            background: #000;
+        }
+            
+
+    </style>
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+        <div id="ali"></div>
+        <div id="aqui"></div>
+    </div>
+</body>
+<script type="text/javascript">
+    (function(){
+        let aqui = document.getElementById('aqui')
+        let ali = document.getElementById('ali')
+        let arr = [1,2,3,4,5]
+
+        arr.forEach(element =>{
+            const label = document.createElement('label')
+            const input = document.createElement('input')
+            const span = document.createElement('span')
+            input.setAttribute('type','checkbox')
+            input.setAttribute('value',`${element}`)
+            input.addEventListener('click', arrayTeste.bind(null, element))
+            span.innerHTML = element
+            label.appendChild(input)
+            label.appendChild(span)
+            aqui.appendChild(label)
+
+            const label2 = document.createElement('label')
+            const input2 = document.createElement('input')
+            const span2 = document.createElement('span')
+
+            input2.setAttribute('type',"radio")
+            input2.setAttribute('value',`${element}`)
+            input2.setAttribute('name',`radio`)
+
+            input2.addEventListener('click', changeBG.bind(null))
+
+            span2.innerHTML = element
+
+            label2.appendChild(input2)
+            label2.appendChild(span2)
+            ali.appendChild(label2)
+
+
+        })
+    })()
+    function changeBG(){
+        console.log('alo')
+    }
+
+    let arrTeste = []
+    function arrayTeste(num){ 
+
+        if(arrTeste.indexOf(num) === -1){
+            arrTeste.push(num)
+            console.log(arrTeste)
+        }else{
+            let index = arrTeste.indexOf(num)
+            arrTeste.splice(index,1)
+            console.log(arrTeste)
+            return
+        }
+        
+    }
+
+</script>
+</html>

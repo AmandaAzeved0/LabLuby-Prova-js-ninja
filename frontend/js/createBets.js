@@ -1,18 +1,16 @@
 const table = document.getElementById('numbers')
 
 table.innerHTML = `
-    <br/><br/>
      <table id="tableContent">
      </table>
      <br/><br/>
      <div id="selected-numbers"><div>
 `
 
-
 let maxRange
 let pckdNumbers = []
-
 let type 
+
 function gtype(gtype){
     const gameType = {
         name : gtype.type,
@@ -25,9 +23,8 @@ function gtype(gtype){
     type = gameType
 }
 
-//muda a descrição do jogo conforme a escolha do usuario (ok)
+//muda a descrição do jogo conforme a escolha do usuario
 function showDescription() {
-
     const description = document.getElementById("gameDescription")
     const text = document.createElement('p')
     text.setAttribute('id', 'text')
@@ -40,42 +37,56 @@ function showDescription() {
     description.appendChild(text)
 }
 
-//determinas algumas propriedades da tabela de acordo com o tipo de jogo
+//determina algumas propriedades da tabela de acordo com o tipo de jogo
 function tableInfo() {
     let tableNumbers = []
+    let rows
+    let columns
+
+    if(type.range % 10 === 0 && type.range !== 10){
+        rows = type.range/10
+        columns = 9
+    }else if(type.range % 5 === 0){
+        rows = type.range/5
+        columns = 4
+    }else if(type.range === 10){
+        rows = 2
+        columns = 4
+    }
 
     for(let i =1;i<=type.range;i++){
         tableNumbers.push(i)
     }
-    console.log(type.range);
-    const rows = tableNumbers.length > 25 ? tableNumbers.length / 10 : 5
-    const columns = tableNumbers.length > 25 ? 9 : 4
 
     checkTable()
+    checkCurrentSelectedNumbersArray()
     tableGenerator(tableNumbers, rows, columns)
 }
 
-//da pra pensar melhor nisso
-let arrDefault=[]
-for(let i =1;i<=60;i++){
-    arrDefault.push(i)
-}
-// gera uma tabela de numeros de acordo com o range do tipo de jogo escolhido(ok)
-function tableGenerator(arr=arrDefault, numberOfRows=5, numberOfColumns=9) {
-    let salto = arr.length > 25 ? 10 : 5
+// gera uma tabela de números de acordo com o range do tipo de jogo escolhido
+function tableGenerator(arr, numberOfRows, numberOfColumns) {
+    let salto = arr.length % 10 === 0 ? 10 : 5
     for (let row = 1; row <= numberOfRows; row++) {
         let tr = document.createElement('tr')
         for (let column = 0; column <= numberOfColumns; column++) {
             let hop = 0
             let td = document.createElement('td')
-            let btn = document.createElement('input')
+            const label = document.createElement('label')
+            const input = document.createElement('input')
+            const span = document.createElement('span')
+                       
             arr[hop] > 9 ?
-                btn.setAttribute('value', `${arr.splice(hop, 1)}`)
-                : btn.setAttribute('value', `0${arr.splice(hop, 1)}`)
-            btn.setAttribute('class', 'number-btn')
-            btn.setAttribute('type', 'button')
-            btn.setAttribute('onclick', `pickedNumber(${btn.value})`)
-            td.appendChild(btn)
+                span.innerHTML=`${arr.splice(hop, 1)}`
+                : span.innerHTML=`0${arr.splice(hop, 1)}`
+
+            span.setAttribute('class', 'nBtn')
+            input.setAttribute('type','checkbox')
+            input.setAttribute('id',span.innerHTML)
+            input.addEventListener('click', selectedNumbers.bind(null, Number(span.innerHTML)))
+            label.appendChild(input)
+            label.appendChild(span)
+            
+            td.appendChild(label)
             tr.appendChild(td)
             hop += salto
         }
@@ -83,7 +94,7 @@ function tableGenerator(arr=arrDefault, numberOfRows=5, numberOfColumns=9) {
     }
 }
 
-//verifica se ja existe uma tabela de numeros na tela (0k)
+//verifica se ja existe uma tabela de números na tela (0k)
 function checkTable() {
     const tableContent = document.getElementById("tableContent")
     if (tableContent.hasChildNodes()) {
@@ -95,63 +106,84 @@ function checkTable() {
 }
 
 //verifica se ja existe um array de números escolhidos na tela (0k)
-function checkCurrentPckdNumbers(){
-    const currentPckdNumbers = document.getElementById("selected-numbers")
-    if(currentPckdNumbers.hasChildNodes()){
-        currentPckdNumbers.removeChild(currentPckdNumbers.childNodes[0])
+function checkCurrentSelectedNumbersArray(){
+    if (pckdNumbers.length !== 0)
         pckdNumbers = []
-    }
     return
 }
 
-//mostra os números escolhidos ate o momento (ok)
-function pickedNumber(num) {   
-    if (pckdNumbers.length >= type.maxNumber ){
-       return  alert(`Escolha somente ${type.maxNumber} números`)
+//verifica se o numero escolhido ja existe no array, se sim, retira
+function selectedNumbers(num){
+    if(pckdNumbers.indexOf(num) !== -1 ){
+        let index = pckdNumbers.indexOf(num)
+        pckdNumbers.splice(index,1) 
+        change(false,num)
+        console.log(pckdNumbers)
+        return
     }
-    pckdNumbers.push(num)
-    showPckdNumbers()
-    
-}
-//ok
-function showPckdNumbers(){
-
-    const showPckdNumbers = document.getElementById('selected-numbers')
-    const content = document.createElement('p')
-
-    if (showPckdNumbers.hasChildNodes()) {
-        showPckdNumbers.removeChild(showPckdNumbers.childNodes[0])
-    }
-    content.appendChild(document.createTextNode(`${pckdNumbers}, `))
-    showPckdNumbers.appendChild(content)
+    addNumbers(num)
+    console.log(pckdNumbers);
 }
 
-//ok
-function addToCart(){  
+//insere ou remove um numero (ok)
+function addNumbers(num){  
+    if(pckdNumbers.length < type.maxNumber  ){
+        if(pckdNumbers.indexOf(num) === -1 ){
+            pckdNumbers.push(num)
+            change(true, num)
+           
+        }else if(pckdNumbers.indexOf(num) !== -1 ){     
+            let index = pckdNumbers.indexOf(num)
+            change(false, num)
+            pckdNumbers.splice(index,1)   
+        }
+        return
+    }
+    change(false, num)
+    alert(`Escolha somente ${type.maxNumber} números`)
+     
+}
+
+//muda o estado de um item na checkbox
+function change(bool, num){
+    const input = num > 9? document.getElementById(`${num}`) : document.getElementById(`0${num}`)
+    input.checked = bool
+    return bool
+}
+//verifica ser o tamnho do array esta correto e gera um obj pra ser mostrado no carrinho
+function addToCart(){
+    console.log(pckdNumbers);
+    if (pckdNumbers.length < type.maxNumber){
+        return  alert(`Escolha ${type.maxNumber} números`)
+    }
+    const date = new Date()
     const body = {
        "type":type.name,
        "price":type.price,
-       "range": pckdNumbers
+       "range": pckdNumbers.sort(crescentSort),
+       "color": type.color,
+       "created_at": date.toLocaleDateString()
     }
-    const ajax = new XMLHttpRequest()
-    ajax.open('POST', 'http://localhost:3000/betsList')
-    ajax.setRequestHeader("Content-type","application/json")
-    ajax.send(JSON.stringify(body))
+    displayBetsList(body)
+    clearGame()
 }
-//ok
+//completa um aposta
 function completeGame(){
-    pckdNumbers = []
-    for( let i = 1; i <= type.maxNumber; i++){
-        pckdNumbers.push(Math.floor(Math.random() * type.range) + 1)
+    while(pckdNumbers.length < type.maxNumber){
+        let random = Math.floor(Math.random() * type.range) + 1
+        if( pckdNumbers.indexOf(random) === -1) {
+            selectedNumbers(random)
+        }
     }
-    showPckdNumbers()
-    console.log(pckdNumbers);
+}
+// ordena os números da aposta
+function crescentSort(a,b){
+    return a - b 
 }
 
 //remove um jogo em curso (ok)
 function clearGame(){
-    const currentPckdNumbers = document.getElementById("selected-numbers")
-    currentPckdNumbers.removeChild(currentPckdNumbers.childNodes[0])
+    tableInfo()
     pckdNumbers = []
 }
 

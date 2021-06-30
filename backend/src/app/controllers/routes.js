@@ -31,13 +31,16 @@ module.exports = app => {
     })
 
     app.post('/betsList', (req, res) => {
-        const {type, price, range } = req.body
+        const {type, price, range,color, created_at  } = req.body
         const currentBets = betsList()
         currentBets.push({ 
             id: Math.random().toString(32).substr(2,9),
             type, 
             price, 
-            range })
+            range,
+            color,
+            created_at 
+        })
         fs.writeFileSync('../backend/src/app/controllers/json/betsList.json', JSON.stringify(currentBets),'utf8')
         res.send(currentBets)
     })
